@@ -1,77 +1,77 @@
-# MMORPG项目简介
-此项目为MMORPG网游的练习项目（仅仅是个Demo），服务器使用C#，客户端使用Unity。同步方式为状态同步，客户端向服务器发送坐标，服务器保存这个坐标并转发给附近的其他玩家。
+# MMORPG Projekt Bevezetés
+Ez a projekt egy gyakorlóprojekt online MMORPG játékokhoz (csak egy demó). A szerver C#-t, a kliens pedig Unity-t használ. A szinkronizációs módszer az állapotszinkronizáció. A kliens elküldi a koordinátákat a szervernek, a szerver pedig elmenti azokat, és továbbítja azokat a közelben lévő többi játékosnak.
 
-## 项目构建和运行
+## Projekt felépítése és lebonyolítása
 
-首先由于服务器使用Mysql存储数据，所以运行服务器的系统必须先安装了Mysql服务，安装的方法可以去网上查。
+Először is, mivel a szerver MySQL-t használ az adatok tárolására, a szervert futtató rendszeren először telepíteni kell a MySQL szolgáltatást. A telepítési módszer online megtalálható.
 
-数据库默认的账号密码都是root。
+Az adatbázis alapértelmezett fiókja és jelszava egyaránt a root.
 
-需要运行SERVER/Common/Data下的build.bat，在客户端以及服务器的运行目录下生成json数据，包括excel表如果有更改也需要运行这个bat。
+A build.bat fájlt a SERVER/Common/Data könyvtárban kell futtatni a JSON adatok létrehozásához a kliens és a szerver futtató könyvtárában. Ha bármilyen változás történik az Excel-táblázatban, akkor is futtatni kell ezt a bat fájlt.
 
-SERVER解决方案下的GameServer即为服务器项目，构建并运行即可启动服务器，会自动创建mmorpg的数据库，并且给你一个默认管理员账号（账号为root，密码为1234567890）。
+A SERVER megoldás alatt található GameServer a szerverprojekt. A szervert úgy indíthatod el, hogy felépíted és futtatod. Automatikusan létrehozza az MMORPG adatbázist, és egy alapértelmezett rendszergazdai fiókot fogsz kapni (a fiók root, a jelszó pedig 1234567890).
 
-MMORPG即为Unity客户端项目，使用Unity6000.0.56f1打开（如果使用更高版本，OdinInspector插件可能会报错，需要自行更新插件）。
+Az MMORPG egy Unity kliensprojekt, és az Unity6000.0.56f1 verzióval nyitható meg. (Ha újabb verziót használsz, az OdinInspector bővítmény hibát jelezhet, és neked kell frissítened a bővítményt.)
 
-## 项目配置
+## Projekt konfiguráció
 
-数据库的配置在SERVER\GameServer\Db\DbConfig.cs，默认账号密码都为root。
+Az adatbázis konfigurációja a SERVER\GameServer\Db\DbConfig.cs fájlban található, az alapértelmezett fiók és jelszó pedig egyaránt a root.
 
-网络的配置在SERVER\Common\Network\NetConfig.cs，如果想部署到远程服务器上，就要修改这里面的ServerIpAddress，并且再次构建Common类库。
+A hálózati konfiguráció a SERVER\Common\Network\NetConfig.cs fájlban található. Ha távoli szerverre szeretné telepíteni, akkor módosítania kell a ServerIpAddress értéket, és újra kell építenie a Common osztálykönyvtárat.
 
-## SERVER - C# 服务器项目
+## SERVER - C# Szerver projekt
 
-使用C#网络api从0搭建框架，服务器和客户端之间使用protobuf进行通信，使用Mysql存储数据，Serilog作为日志库。
+Használj C# hálózati API-t a keretrendszer nulláról történő felépítéséhez, használj protobuf-ot a szerver és a kliens közötti kommunikációhoz, használj MySQL-t az adatok tárolására, és használj Serilog-ot naplózó könyvtárként.
 
-使用excel表格配置地图数据、人物属性、地图上怪物分布情况、掉落物属性等，然后转换为json数据给服务器和客户端解析。
+Használj Excel táblázatokat a térképadatok, a karakterattribútumok, a szörnyek eloszlása ​​a térképen, a leesési attribútumok stb. konfigurálásához, majd konvertáld ezeket JSON adatokká szerver és kliens elemzéshez.
 
-使用aoi算法优化实体之间的交互、检测等逻辑，以及减少同步的网络带宽占用。
+Az AOI algoritmus segítségével optimalizálhatja az entitások közötti interakciót és észlelési logikát, és csökkentheti a szinkronizálás hálózati sávszélesség-használatát.
 
-### Common类库
+### Common Osztály könyvtára
 
-此库即为服务器和客户端之间共用的类库。
+Ez a könyvtár az osztálykönyvtár, amelyet a szerver és a kliens megosztott.
 
-- Data文件夹内存储的就是excel表格，存储了技能定义、物品定义等，以及对应转换的json和生成的cs文件。
-- Inventory文件夹为背包的一些通用代码。
-- Network为通用网络框架。
-- Proto为protobuf和生成的cs代码。
-- Tool为一些通用的工具api。
+- A Data mappa Excel-táblázatokat tárol, amelyek tartalmazzák a készségdefiníciókat, elemdefiníciókat stb., valamint a hozzájuk tartozó konvertált JSON és generált CS fájlokat.
+- Inventory néhány gyakori kódot tartalmaz a hátizsákhoz.
+- Network Általános hálózati keretrendszer.
+- A proto protobuf és generált cs kód.
+- Tool néhány gyakori eszköz API.
 
-## MMORPG - Unity客户端项目
+## MMORPG - Unity Kliens projekt
 
-使用QFramework框架，MVC架构。
+QFramework keretrendszer, MVC architektúra használata。
 
-实体都使用了状态机进行管理。
+Az entitásokat állapotgépek segítségével kezelik.
 
-玩家使用了一个自制的状态编辑器来管理各种行为以及行为之间的过渡（类似行为树的简化版）。
+A játékos egy egyéni állapotszerkesztőt használ a különféle viselkedések és a viselkedések közötti átmenetek kezelésére (hasonlóan egy viselkedésfa egyszerűsített változatához).
 
-### 玩法提示
-1. 鼠标左键单击是普通攻击，滚轮缩放视野，右键按下然后拖动鼠标为旋转视野。
-2. 按键盘“V”拾取物品，键盘“I”打开背包，右键物品使用。
-3. 键盘“Q”、“E”、“R”、“T”分别是技能1、技能2、技能3、技能4的快捷键。
-4. 在聊天栏使用--/前缀输入作弊码（需要账号有管理员权限），目前只有一个“等级提升”的作弊码，示例：“--/等级提升”。
+### Tippek a játékhoz
+1. A bal egérgombbal kattintás egy normál támadás, a görgővel nagyítható a látómező, a jobb gombbal lenyomva és az egér húzásával pedig elforgatható a látómező.
+2. Nyomd meg a billentyűzeten a „V” billentyűt a tárgyak felvételéhez, nyomd meg az „I” billentyűt a hátizsák kinyitásához, és kattints jobb gombbal a tárgyra a használatához.
+3. A "Q", "E", "R" és "T" billentyűzeten található billentyűparancsok rendre az 1., 2., 3. és 4. képességszinthez tartoznak.
+4. Használd a --/ előtagot csalókódok beírásához a csevegősávba (a fióknak rendszergazdai jogosultságokkal kell rendelkeznie). Jelenleg csak egy csalókód létezik a "Level Up" funkcióhoz, például: "--/Level Up".
 
-## 注意
+## Értesítés
 
-1. 如果要部署到服务器中，记得在服务器中安装个.net环境。
-2. 客户端的按钮不要重复点，比如登录按钮，进入游戏按钮什么的，当你点击第一次的时候已经在请求服务器了，因为时间原因没有增加加载框什么的，多次点击就会发送多次请求，可能会出问题。
-3. 客户端还没做注册的UI，目前只能通过直接修改数据库来添加账号（在mmorpg数据库的user表中）。
-4. 任务系统虽然服务器上框架搭得差不多了，但是客户端还没有接入，NPC那里接取了任务实际上没什么用。
-5. 客户端素材仅供交流学习使用。
+1. Ha szerverre szeretnél telepíteni, ne felejts el .net környezetet telepíteni a szerverre.
+2. Ne kattints többször a kliens gombjaira, például a bejelentkezés gombra, a játékba lépés gombra stb. Amikor először kattintasz rá, az már a szerverhez fordul. Időbeli okok miatt nincs betöltőablak vagy hasonló. Több kattintás több kérést küld, ami problémákat okozhat.
+3. A kliensnek még nincs regisztrációs felhasználói felülete, és jelenleg csak az adatbázis közvetlen módosításával (az mmorpg adatbázis felhasználói táblázatában) lehet fiókokat hozzáadni.
+4. Bár a feladatrendszer keretrendszere szinte teljesen elkészült a szerveren, a kliens még nem csatlakozott, így a feladatok fogadása az NPC-től valójában haszontalan.
+5.Az ügyfélnek szánt anyagok kizárólag kommunikációs és tanulási célokat szolgálnak.
 
-## 视频介绍
+## Videó bemutatkozás
 
 https://www.bilibili.com/video/BV1uNtrefEbn
 
-## 问题
+## Kérdés
 
-有什么构建和运行的问题，或者项目bug什么的，可以在该仓库的issues中提问。
+Ha bármilyen problémád adódik a fordítással és futtatással, vagy projekthibák merülnek fel, kérdéseket tehetsz fel a repository problémái részben.
 
-QQ群：777411956
+QQ csoport：777411956
 
-代码有看不懂的或者什么其他问题都可以加QQ群问
+Ha nem érted a kódot, vagy bármilyen más kérdésed van, felveheted a QQ csoportot, hogy feltehesd a kérdéseidet.
 
-## 开发者
+## Fejlesztők
 
-- 客户端主要负责人：fuyouawa
-- 服务器主要负责人：yuyuqwq
+- Az Kliensért felelős fő személy：fuyouawa
+- A szerverért felelős fő személy：yuyuqwq
